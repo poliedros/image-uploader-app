@@ -8,7 +8,7 @@ async function uploadFile(file: File | undefined) {
     file,
   };
 
-  const { data } = await axios.post("https://images.czar.dev", request, {
+  const { data } = await axios.post("https://api.images.czar.dev", request, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
