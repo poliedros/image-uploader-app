@@ -37,6 +37,13 @@ const Home: NextPage = () => {
         <title>Image Uploader</title>
       </Head>
 
+      <h1 className="font-medium leading-tight text-5xl mt-0 text-gray-600">
+        Image uploader
+      </h1>
+      <p>
+        This is a image uploader example built by{" "}
+        <a href="https://czar.dev">Czar+</a>
+      </p>
       <Dropdown file={file} onChange={setFile} />
 
       {loading ? (
