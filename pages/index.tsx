@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { NextPage } from "next";
 import axios from "axios";
+import Head from "next/head";
 
 async function uploadFile(file: File | undefined) {
   const request = {
@@ -32,6 +33,10 @@ const Home: NextPage = () => {
 
   return (
     <div className="container mx-auto">
+      <Head>
+        <title>Image Uploader</title>
+      </Head>
+
       <Dropdown file={file} onChange={setFile} />
 
       {loading ? (
