@@ -1,9 +1,17 @@
 import { useState } from "react";
 import type { NextPage } from "next";
 
+const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+
 const Home: NextPage = () => {
   const [file, setFile] = useState<File | undefined>(undefined);
   const [loading, setLoading] = useState(false);
+
+  async function handleClick() {
+    setLoading(true);
+    await delay(2000);
+    setLoading(false);
+  }
 
   return (
     <div className="container mx-auto">
@@ -28,10 +36,14 @@ const Home: NextPage = () => {
                 d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
               ></path>
             </svg>
-            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-              <span className="font-semibold">Click to upload</span> or drag and
-              drop
-            </p>
+            {file ? (
+              <h1>{file.name}</h1>
+            ) : (
+              <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                <span className="font-semibold">Click to upload</span> or drag
+                and drop
+              </p>
+            )}
             <p className="text-xs text-gray-500 dark:text-gray-400">
               Maximum: 2Mb
             </p>
@@ -52,12 +64,18 @@ const Home: NextPage = () => {
       {loading ? (
         <Spinner />
       ) : (
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          onClick={() => setLoading(true)}
-        >
-          Upload file
-        </button>
+        <>
+          {file ? (
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={handleClick}
+            >
+              Upload
+            </button>
+          ) : (
+            <></>
+          )}
+        </>
       )}
     </div>
   );
