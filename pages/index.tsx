@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import axios from "axios";
 import Head from "next/head";
 
-const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+// const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
 async function uploadFile(file: File | undefined) {
   const request = {
@@ -21,11 +21,11 @@ async function uploadFile(file: File | undefined) {
   return `https://catalogv2.blob.core.windows.net/storage-images/${id}`;
 }
 
-async function uploadFileMock(file: File | undefined) {
-  await delay(2000);
-  const id = "62ef3b70c6997747ea7dc961";
-  return `https://catalogv2.blob.core.windows.net/storage-images/${id}`;
-}
+// async function uploadFileMock(file: File | undefined) {
+//   await delay(2000);
+//   const id = "62ef3b70c6997747ea7dc961";
+//   return `https://catalogv2.blob.core.windows.net/storage-images/${id}`;
+// }
 
 const Home: NextPage = () => {
   const [file, setFile] = useState<File | undefined>(undefined);
@@ -34,7 +34,7 @@ const Home: NextPage = () => {
 
   async function handleClick() {
     setLoading(true);
-    const linkResponse = await uploadFileMock(file);
+    const linkResponse = await uploadFile(file);
     setLink(linkResponse);
     setLoading(false);
   }
