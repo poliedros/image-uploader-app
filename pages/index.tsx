@@ -44,6 +44,7 @@ const Home: NextPage = () => {
         This is a image uploader example built by{" "}
         <a href="https://czar.dev">Czar+</a>
       </p>
+      <p>This file will live for 2 days.</p>
       <Dropdown file={file} onChange={setFile} />
 
       {loading ? (
