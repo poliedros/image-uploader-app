@@ -3,6 +3,8 @@ import type { NextPage } from "next";
 import axios from "axios";
 import Head from "next/head";
 
+const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+
 async function uploadFile(file: File | undefined) {
   const request = {
     file,
@@ -19,6 +21,12 @@ async function uploadFile(file: File | undefined) {
   return `https://catalogv2.blob.core.windows.net/storage-images/${id}`;
 }
 
+async function uploadFileMock(file: File | undefined) {
+  await delay(2000);
+  const id = "62ef3b70c6997747ea7dc961";
+  return `https://catalogv2.blob.core.windows.net/storage-images/${id}`;
+}
+
 const Home: NextPage = () => {
   const [file, setFile] = useState<File | undefined>(undefined);
   const [loading, setLoading] = useState(false);
@@ -26,7 +34,7 @@ const Home: NextPage = () => {
 
   async function handleClick() {
     setLoading(true);
-    const linkResponse = await uploadFile(file);
+    const linkResponse = await uploadFileMock(file);
     setLink(linkResponse);
     setLoading(false);
   }
@@ -106,6 +114,8 @@ function Spinner() {
 }
 
 function Dropdown({ file, onChange = () => {} }: any) {
+  const [bigFileWarning, setBigFileWarning] = useState(false);
+
   return (
     <div className="flex justify-center items-center w-full">
       <label
@@ -136,7 +146,11 @@ function Dropdown({ file, onChange = () => {} }: any) {
               drop
             </p>
           )}
-          <p className="text-xs text-gray-500 dark:text-gray-400">
+          <p
+            className={`text-xs ${
+              bigFileWarning ? "text-red-500" : "text-gray-500"
+            } dark:text-gray-400`}
+          >
             Maximum: 2Mb
           </p>
         </div>
@@ -145,9 +159,22 @@ function Dropdown({ file, onChange = () => {} }: any) {
           type="file"
           className="hidden"
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            if (!e.target.files) return;
+            setBigFileWarning(false);
 
-            onChange(e.target.files[0]);
+            const TWO_MBs = 2097152;
+            const files = e.target.files;
+
+            if (!files) return;
+
+            if (files.length <= 0) return;
+
+            if (files[0].size > TWO_MBs) {
+              setBigFileWarning(true);
+              onChange(undefined);
+              return;
+            }
+
+            onChange(files[0]);
           }}
         />
       </label>
